@@ -1,8 +1,8 @@
 import { Command } from 'discord-akairo'
 import { MessageEmbed } from 'discord.js'
-const Discord = 'discord.js'
 
 export default class Help extends Command {
+
     constructor() {
         super('help', {
             aliases: ['help', 'commands'],
@@ -14,6 +14,7 @@ export default class Help extends Command {
             clientPermissions: ['SEND_MESSAGES'],
             typing: true,
             args: [
+
                 /* Not specifying prompt here as this argument is optional */
                 {
                     id: 'command',
@@ -23,22 +24,25 @@ export default class Help extends Command {
         })
     }
 
-    async exec(message, args) {
+    exec(message: any, args: any) {
+
+        const command = args.command
 
         /* Gets the prefix of the command handler */
+        /* @ts-ignore */
         const prefix = this.handler.prefix
-        const command = args.command
+        
         /* If user did not specify a command */
         if (!command) {
 
-            const embed = new Discord.MessageEmbed()
+            const embed = new MessageEmbed()
                 .setTitle('Help')
                 .setColor('BLUE')
                 .setFooter(`${prefix}${this.aliases[0]} ${this.description.usage}`)
 
             for (const category of this.handler.categories.values()) {
                 let categoryName
-                let categoryId = functions.capitalizeFirstLetter(category.id)
+                let categoryId = this.capitalizeFirstLetter(category.id)
 
                 if (this.client.isOwner(message.author)) categoryName = `${categoryId}`
                 else {
@@ -51,7 +55,7 @@ export default class Help extends Command {
                 if (categoryName) {
                     embed.addField(
                         categoryName,
-                        category.map((cmd) => '``' + cmd.aliases[0] + '``').join(' ')
+                        category.map((cmd: any) => '``' + cmd.aliases[0] + '``').join(' ')
                     )
                 }
             }
@@ -75,7 +79,7 @@ export default class Help extends Command {
             if (cmd.aliases.length != 1 || !cmd.aliases) description.push('**Aliases:** ' + cmd.aliases.splice(1, cmd.aliases.length).join(', ')) /* Splicing as we don't want the first alias */
             if (cmd.cooldown != 0) description.push('**Cooldown:** ' + cmd.cooldown / 1000 + ' s')
 
-            const embed = new Discord.MessageEmbed()
+            const embed = new MessageEmbed()
                 .setTitle(cmd.id)
                 .setColor('BLUE')
                 .setDescription(description.join('\n'))
@@ -83,6 +87,10 @@ export default class Help extends Command {
 
             return message.channel.send(embed)
         }
+    }
+
+    capitalizeFirstLetter(string: string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
 }
