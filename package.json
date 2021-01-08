@@ -1,6 +1,6 @@
 {
   "name": "@bronzw/create-discord-js-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple CLI tool that helps you create boilerplate/template code for discord.js with vanilla discord.js + discord-akairo! Creates template commands and sets everything up with enviorment variables.",
   "main": "src/index.ts",
   "scripts": {
@@ -16,7 +16,7 @@
     "init"
   ],
   "bin": {
-    "@bronzw/create-discord-js-bot": "src/index.ts"
+    "create-discord-js-bot": "src/index.ts"
   },
   "author": "BronzW",
   "license": "MIT",
