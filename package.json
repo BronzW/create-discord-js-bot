@@ -43,6 +43,7 @@
     "ncp": "^2.0.0",
     "nodemon": "^2.0.6",
     "ora": "^5.2.0",
+    "package-name-regex": "^1.0.8",
     "shelljs": "^0.8.4",
     "tsc": "^1.20150623.0",
     "typescript": "^4.1.3"

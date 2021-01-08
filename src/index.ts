@@ -11,41 +11,47 @@ const exec = require('await-exec')
 const chalk = require('chalk')
 const shell = require('shelljs')
 
-const [,, ...args] = process.argv
 const ora = require('ora')
 const cliProgress = require('cli-progress')
+const packageNameRegex = require('package-name-regex')
 
 const templatePath = path.resolve(__dirname, 'templates')
 
-
-
 ;(async () => {
-    if (args.length === 0) {
-        return console.log(`${chalk.red()} You need to provide a name!`)
-    }
+
     const folders = await readdir(templatePath).catch(console.log)
 
-    const { language, framework } = await inquirer.prompt([
+    let { language, framework, name } = await inquirer.prompt([
         {
             type: 'list',
-            message: 'Pick language:',
+            message: '🔨 Pick framework:',
+            name: 'framework',
+            choices: folders,
+        },
+        {
+            type: 'list',
+            message: '🚀 Pick language:',
             name: 'language',
             choices: ['typescript', 'javascript'],
         },
         {
-            type: 'list',
-            message: 'Pick framework:',
-            name: 'framework',
-            choices: folders,
-        },
+            type: 'input',
+            message: '📋 Supply a name:',
+            name: 'name',
+        }
     ])
+
+    name = name.toLowerCase()
+    if (!packageNameRegex.test(name)) {
+        return console.log('You need to provide a valid package name!')
+    }
 
     for (let i of folders) {
         if (framework === i) {
             for (let j of await readdir(path.resolve(templatePath, framework))) {
                 if (j === language) {
                     const folder = path.resolve(templatePath, framework, language)
-                    const destination = path.resolve(process.cwd(), args[0])
+                    const destination = path.resolve(process.cwd(), name)
                     if (fs.existsSync(destination)) {
                         return console.log(chalk.yellow('That directory already exists! Try using another name.'))
                     }
@@ -63,7 +69,7 @@ const templatePath = path.resolve(__dirname, 'templates')
                             if (language === 'typescript') total += 2
                             progressBar.start(total, 0)
 
-                            shell.cd(args[0])
+                            shell.cd(name)
 
                             await exec('npm init -y --loglevel=error')
                             progressBar.increment()
