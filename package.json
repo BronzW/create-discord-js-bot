@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BronzW/discord.js-template.git"
+    "url": "git+https://github.com/BronzW/create-discord-js-bot.git"
   },
   "keywords": [
     "discord.js",
@@ -21,9 +21,9 @@
   "author": "BronzW",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BronzW/discord.js-template/issues"
+    "url": "https://github.com/BronzW/create-discord-js-bot/issues"
   },
-  "homepage": "https://github.com/BronzW/discord.js-template#readme",
+  "homepage": "https://github.com/BronzW/create-discord-js-bot#readme",
   "dependencies": {
     "await-exec": "^0.1.2",
     "chalk": "^4.1.0",
