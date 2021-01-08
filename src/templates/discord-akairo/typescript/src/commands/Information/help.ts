@@ -46,16 +46,18 @@ export default class Help extends Command {
 
                 if (this.client.isOwner(message.author)) categoryName = `${categoryId}`
                 else {
-                    if (categoryId.toLowerCase() !== 'owner')
-                        categoryName = `${this.handler.categories
-                            .filter((c) => c.id.toLowerCase() != 'owner')
-                            .get(categoryId)}`
+                    categoryName = `${this.handler.categories
+                        .filter((c) => c.id.toLowerCase() != 'owner')
+                        .get(categoryId)}`
                 }
 
                 if (categoryName) {
                     embed.addField(
                         categoryName,
-                        category.map((cmd: any) => '``' + cmd.aliases[0] + '``').join(' ')
+                        category
+                            .filter((cmd: Command) => !(cmd.ownerOnly && !this.client.isOwner(message.author)))
+                            .map((cmd: Command) => '``' + cmd.aliases[0] + '``')
+                            .join(' ')
                     )
                 }
             }
@@ -71,7 +73,7 @@ export default class Help extends Command {
 
             const cmdDesc = cmd.description
 
-            let description = []
+            let description: string[] = []
 
             description.push('**Description:** ' + cmdDesc.content)
 

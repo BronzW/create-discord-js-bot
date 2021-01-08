@@ -1,6 +1,8 @@
-const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
+import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo'
 
 export default class Client extends AkairoClient {
+    commandHandler: CommandHandler
+    listenerHandler: ListenerHandler
 
     constructor() {
         super(

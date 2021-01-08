@@ -8,14 +8,11 @@ export default class PingCommand extends Command {
             aliases: ['ping'] /* All commands should have the first alias as the id of the command */,
             description: {
                 content: 'Ping command!',
-                usage: '',
             },
     
             userPermissions: ['SEND_MESSAGES'],
             clientPermissions: ['SEND_MESSAGES'],
-            ownerOnly: true,
             typing: true,
-            cooldown: 0,
         })
     }
 
