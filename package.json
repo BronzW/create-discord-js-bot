@@ -1,11 +1,10 @@
 {
-  "name": "discord.js-template",
+  "name": "create-discord-bot",
   "version": "1.0.0",
-  "description": "Creates boilerplate/template code for discord.js with vanilla discord.js + discord-akairo! Creates template commands and sets everything up with enviorment variables.",
-  "main": "bin/index.js",
+  "description": "Simple CLI tool that helps you create boilerplate/template code for discord.js with vanilla discord.js + discord-akairo! Creates template commands and sets everything up with enviorment variables.",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon bin/index.js",
-    "watch": "tsc -w"
+    "test": "echo ..."
   },
   "repository": {
     "type": "git",
@@ -17,35 +16,31 @@
     "init"
   ],
   "bin": {
-    "create-discordjs-bot": "src/index.ts"
+    "create-discord-bot": "src/index.ts"
   },
   "author": "BronzW",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/BronzW/discord.js-template/issues"
   },
   "homepage": "https://github.com/BronzW/discord.js-template#readme",
-  "devDependencies": {
-    "@types/inquirer": "^7.3.1",
-    "@types/node": "^14.14.20",
-    "@types/shelljs": "^0.8.8",
+  "dependencies": {
     "await-exec": "^0.1.2",
     "chalk": "^4.1.0",
-    "child_process": "^1.0.2",
     "cli-progress": "^3.8.2",
-    "commander": "^6.2.1",
-    "discord-akairo": "^8.1.0",
     "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
+    "edit-json-file": "^1.5.0",
     "fs": "^0.0.1-security",
-    "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
     "ncp": "^2.0.0",
-    "nodemon": "^2.0.6",
     "ora": "^5.2.0",
     "package-name-regex": "^1.0.8",
+    "path": "^0.12.7",
     "shelljs": "^0.8.4",
     "tsc": "^1.20150623.0",
     "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20"
   }
 }

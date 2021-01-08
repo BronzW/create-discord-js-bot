@@ -14,6 +14,7 @@ const shell = require('shelljs')
 const ora = require('ora')
 const cliProgress = require('cli-progress')
 const packageNameRegex = require('package-name-regex')
+const editJsonFile = require('edit-json-file')
 
 const templatePath = path.resolve(__dirname, 'templates')
 
@@ -60,11 +61,14 @@ const templatePath = path.resolve(__dirname, 'templates')
                         if (err) {
                             console.error('Error: ' + err)
                         } else {
+                            infoLog('Copied template')
+                            infoLog('Installing packages...')
 
                             const progressBar = new cliProgress.SingleBar({
-                                format: ' 👍 Creating epic code {bar} {percentage}% | {value}/{total}'
+                                format: ' ⭐ {bar} {percentage}% | {value}/{total} packages installed'
                             }, cliProgress.Presets.shades_grey)
-                            let total = 5
+                            
+                            let total = 4
                             if (framework === 'discord-akairo') total++
                             if (language === 'typescript') total += 2
                             progressBar.start(total, 0)
@@ -73,6 +77,19 @@ const templatePath = path.resolve(__dirname, 'templates')
 
                             await exec('npm init -y --loglevel=error')
                             progressBar.increment()
+
+                            if (language === 'typescript') {
+                                editJsonFile(destination + '/package.json').set("scripts", {
+                                    "start": "node dist/core/index",
+                                    "build": "tsc",
+                                    "dev": "npm run build && npm start",
+                                }).save()
+                            } else {
+                                editJsonFile(destination + '/package.json').set("scripts", {
+                                    "start": "node lib/core/index",
+                                    "dev": "nodemon lib/core/index",
+                                }).save()
+                            }
 
                             await exec(`npm install ${framework} nodemon --save --loglevel=error`)
                             progressBar.increment()
@@ -94,20 +111,14 @@ const templatePath = path.resolve(__dirname, 'templates')
                                 await exec('npm install typescript --loglevel=error')
                                 progressBar.increment()
                             }
+                            progressBar.stop()
 
                             await exec('npx create-gitignore Node')
-                            progressBar.increment()
 
-                            progressBar.stop()
-                            const animation = ora({
-                                text: 'Finishing...',
-                                spinner: {
-                                    frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
-                                }
-                            }).start()
+                            infoLog('Created gitignore')
                             await fs.writeFile(destination + '/README.md', '# Discord.js Bot\nUsing ``npx create-discordjs-bot``', () => { })
-                            animation.stop()
-                            console.log(chalk.green('\nCreated template code!'))
+                            infoLog('Created README.md')
+                            console.log(chalk.green('\nTemplate code complete!'))
 
                         }
                     })
@@ -116,4 +127,8 @@ const templatePath = path.resolve(__dirname, 'templates')
         }
     }
 })()
+
+function infoLog(message) {
+    console.log(chalk.blue('info ') + message)
+}
 

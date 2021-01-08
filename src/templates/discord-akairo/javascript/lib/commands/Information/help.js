@@ -67,7 +67,7 @@ module.exports = class Help extends Command {
             const cmd = command
 
             /* If the command does not exist or if it is owner only */
-            if (!cmd || (!cmd.ownerOnly && !this.client.isOwner(message.author))) {
+            if (!cmd || (cmd.ownerOnly && !this.client.isOwner(message.author))) {
                 return message.channel.send('There is no command like that!')
             }
 

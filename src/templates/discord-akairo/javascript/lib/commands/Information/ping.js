@@ -12,7 +12,6 @@ module.exports = class PingCommand extends Command {
     
             userPermissions: ['SEND_MESSAGES'],
             clientPermissions: ['SEND_MESSAGES'],
-            ownerOnly: true,
             typing: true,
             cooldown: 0,
         })
