@@ -11,7 +11,6 @@ const exec = require('await-exec')
 const chalk = require('chalk')
 const shell = require('shelljs')
 
-const ora = require('ora')
 const cliProgress = require('cli-progress')
 const packageNameRegex = require('package-name-regex')
 const editJsonFile = require('edit-json-file')
@@ -19,7 +18,6 @@ const editJsonFile = require('edit-json-file')
 const templatePath = path.resolve(__dirname, 'templates')
 
 ;(async () => {
-
     const folders = await readdir(templatePath).catch(console.log)
 
     let { language, framework, name } = await inquirer.prompt([
@@ -39,12 +37,24 @@ const templatePath = path.resolve(__dirname, 'templates')
             type: 'input',
             message: '📋 Supply a name:',
             name: 'name',
-        }
+        },
     ])
 
-    name = name.toLowerCase()
+    if (name === '.') {
+        name = ''
+    }
+
+    if (name === '') {
+        name = path.basename(process.cwd())
+    }
+
     if (!packageNameRegex.test(name)) {
-        return console.log('You need to provide a valid package name!')
+        return console.log(
+            chalk.red('error ') +
+                'You need to provide a valid package name! Current name is not compatbile with npm and node. (' +
+                chalk.yellow(name) +
+                ')'
+        )
     }
 
     for (let i of folders) {
@@ -52,6 +62,7 @@ const templatePath = path.resolve(__dirname, 'templates')
             for (let j of await readdir(path.resolve(templatePath, framework))) {
                 if (j === language) {
                     const folder = path.resolve(templatePath, framework, language)
+
                     const destination = path.resolve(process.cwd(), name)
                     if (fs.existsSync(destination)) {
                         return console.log(chalk.yellow('That directory already exists! Try using another name.'))
@@ -64,10 +75,13 @@ const templatePath = path.resolve(__dirname, 'templates')
                             infoLog('Copied template')
                             infoLog('Installing packages...')
 
-                            const progressBar = new cliProgress.SingleBar({
-                                format: ' ⭐ {bar} {percentage}% | {value}/{total} packages installed'
-                            }, cliProgress.Presets.shades_grey)
-                            
+                            const progressBar = new cliProgress.SingleBar(
+                                {
+                                    format: ' ⭐ {bar} {percentage}% | {value}/{total} packages installed',
+                                },
+                                cliProgress.Presets.shades_grey
+                            )
+
                             let total = 4
                             if (framework === 'discord-akairo') total++
                             if (language === 'typescript') total += 2
@@ -79,16 +93,20 @@ const templatePath = path.resolve(__dirname, 'templates')
                             progressBar.increment()
 
                             if (language === 'typescript') {
-                                editJsonFile(destination + '/package.json').set("scripts", {
-                                    "start": "node dist/core/index",
-                                    "build": "tsc",
-                                    "dev": "npm run build && npm start",
-                                }).save()
+                                editJsonFile(destination + '/package.json')
+                                    .set('scripts', {
+                                        start: 'node dist/core/index',
+                                        build: 'tsc',
+                                        dev: 'npm run build && npm start',
+                                    })
+                                    .save()
                             } else {
-                                editJsonFile(destination + '/package.json').set("scripts", {
-                                    "start": "node lib/core/index",
-                                    "dev": "nodemon lib/core/index",
-                                }).save()
+                                editJsonFile(destination + '/package.json')
+                                    .set('scripts', {
+                                        start: 'node lib/core/index',
+                                        dev: 'nodemon lib/core/index',
+                                    })
+                                    .save()
                             }
 
                             await exec(`npm install ${framework} nodemon --save --loglevel=error`)
@@ -99,7 +117,6 @@ const templatePath = path.resolve(__dirname, 'templates')
 
                             await exec(`npm install dotenv --save --loglevel=error`)
                             progressBar.increment()
-
 
                             if (framework === 'discord-akairo') {
                                 await exec('npm install discord.js --save --loglevel=error')
@@ -116,10 +133,9 @@ const templatePath = path.resolve(__dirname, 'templates')
                             await exec('npx create-gitignore Node')
 
                             infoLog('Created gitignore')
-                            await fs.writeFile(destination + '/README.md', '# Discord.js Bot\nUsing ``npx create-discordjs-bot``', () => { })
+                            await fs.writeFile(destination + '/README.md', '# Discord.js Bot\nUsing ``npx create-discordjs-bot``', () => {})
                             infoLog('Created README.md')
                             console.log(chalk.green('\nTemplate code complete!'))
-
                         }
                     })
                 }
@@ -131,4 +147,3 @@ const templatePath = path.resolve(__dirname, 'templates')
 function infoLog(message) {
     console.log(chalk.blue('info ') + message)
 }
-
