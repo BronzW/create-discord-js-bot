@@ -1,11 +1,11 @@
 {
   "name": "@bronzw/create-discord-js-bot",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Simple CLI tool that helps you create boilerplate/template code for discord.js with vanilla discord.js + discord-akairo! Creates template commands and sets everything up with enviorment variables.",
   "main": "src/index.js",
   "scripts": {
     "test": "npx ts-node src",
-    "release": "yarn publish && git add . && git commit -m process.env.msg || 'Commit' && git push"
+    "release": "yarn publish && git add . && git commit -m process.env.msg || \"Commit\" && git push"
   },
   "repository": {
     "type": "git",
