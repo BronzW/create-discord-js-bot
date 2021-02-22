@@ -128,13 +128,22 @@ const templatePath = path.resolve(__dirname, 'templates')
                                 await exec('npm install typescript --loglevel=error')
                                 progressBar.increment()
                             }
+
                             progressBar.stop()
 
                             await exec('npx create-gitignore Node')
 
                             infoLog('Created gitignore')
-                            await fs.writeFile(destination + '/README.md', '# Discord.js Bot\nUsing ``npx create-discordjs-bot``', () => {})
+                            await fs.writeFile(destination + '/README.md', '# Discord.js Bot\nCreated using ``npx create-discordjs-bot``', () => {})
                             infoLog('Created README.md')
+
+                            await exec('git init')
+                            infoLog('Initialized git repository')
+
+                            await exec('git add .')
+                            await exec('git commit -m "Initial commit"')
+                            infoLog('Commited code')
+
                             console.log(chalk.green('\nTemplate code complete!'))
                         }
                     })
